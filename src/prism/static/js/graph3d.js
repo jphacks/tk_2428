@@ -12,15 +12,19 @@ class Graph3D {
         this.initCamera();
         this.initLights();
         this.initGrid();
-        
+
         // データ構造の初期化
         this.nodes = new Map();
         this.edges = [];
-        
+
+        // レイキャスターの初期化
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
         // イベントリスナーとコントロールの設定
         this.setupEventListeners();
         this.setupControls();
-        
+
         // 初期データの読み込みとアニメーション開始
         this.loadTestData();
         this.animate();
@@ -60,7 +64,7 @@ class Graph3D {
         this.controls.minDistance = 30;
         this.controls.maxDistance = 200;
         this.controls.minPolarAngle = Math.PI / 6;
-        this.controls.maxPolarAngle = Math.PI * 5/6;
+        this.controls.maxPolarAngle = Math.PI * 5 / 6;
     }
 
     // ライティングの初期化
@@ -68,7 +72,7 @@ class Graph3D {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
         directionalLight.position.set(1, 1, 1);
-        
+
         this.scene.add(ambientLight);
         this.scene.add(directionalLight);
     }
@@ -88,6 +92,9 @@ class Graph3D {
 
         // アップロードボタンの処理
         this.setupUploadListener();
+
+        window.addEventListener('click', this.onNodeClick.bind(this));
+        window.addEventListener('dblclick', this.onMouseDoubleClick.bind(this));
     }
 
     // スライダーのイベントリスナー設定
@@ -100,6 +107,50 @@ class Graph3D {
                 span.textContent = slider.value;
             });
         });
+    }
+
+    // マウス位置の更新
+    updateMousePosition(event) {
+        const container = document.getElementById('graph-container');
+        const bounds = container.getBoundingClientRect();
+        this.mouse.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+        this.mouse.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
+    }
+
+    // ノードダブルクリックイベント
+    onMouseDoubleClick(event) {
+        this.updateMousePosition(event);
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(Array.from(this.nodes.values()).map(node => node.plane));
+
+        if (intersects.length > 0) {
+            const nodeData = intersects[0].object.userData.nodeData;
+            alert(nodeData.description);  // descriptionを表示
+        }
+
+    }
+
+    // ノードクリックイベント
+    onNodeClick(event) {
+        this.updateMousePosition(event);
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(Array.from(this.nodes.values()).map(node => node.plane));
+
+        if (intersects.length > 0) {
+            const intersectedNode = this.nodes.get(intersects[0].object.userData.nodeData.id);
+            this.moveCameraToNode(intersectedNode);  // ノードにカメラを移動
+        }
+    }
+
+    // カメラを指定ノードに移動
+    moveCameraToNode(node) {
+        const targetPos = node.getPosition(); // ノードの位置を取得
+        console.log('Target Position:', targetPos); // デバッグ用ログ
+
+        // カメラの位置をノードの位置に設定（少し上から見下ろすように調整）
+        this.camera.position.set(targetPos.x, targetPos.y + 10, targetPos.z + 10);
+        this.controls.target.copy(targetPos); // カメラの注視点をノードの位置に設定
+        this.controls.update(); // コントロールを更新
     }
 
     // アップロードボタンのイベントリスナー設定
@@ -132,7 +183,7 @@ class Graph3D {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text })
             });
-            
+
             if (!response.ok) {
                 const error = await response.json();
                 throw new Error(error.error || '解析に失敗しました');
@@ -220,13 +271,13 @@ class Graph3D {
             this.scene.remove(node.outline);
             if (node.textSprite) this.scene.remove(node.textSprite);
         });
-        
+
         this.edges.forEach(edge => {
             this.scene.remove(edge.cylinder);
             this.scene.remove(edge.cone);
             if (edge.labelSprite) this.scene.remove(edge.labelSprite);
         });
-        
+
         this.nodes.clear();
         this.edges = [];
     }
@@ -257,7 +308,7 @@ class Graph3D {
             node.setPosition(nodeData.position.x, nodeData.position.y, nodeData.position.z);
             this.nodes.set(nodeData.id, node);
         });
-    
+
         // エッジの作成
         data.edges.forEach(edgeData => {
             const startNode = this.nodes.get(edgeData.source);
@@ -265,9 +316,9 @@ class Graph3D {
             if (startNode && endNode) {
                 // エッジ作成時にラベルと太さを渡す
                 const edge = new Edge(
-                    this.scene, 
-                    startNode, 
-                    endNode, 
+                    this.scene,
+                    startNode,
+                    endNode,
                     edgeData.label,  // ラベルを渡す
                     document.getElementById('edge-size').value * 0.01  // 矢印の太さ
                 );

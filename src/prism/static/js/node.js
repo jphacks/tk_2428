@@ -1,4 +1,4 @@
-//src/prism/static/js/node.js
+//node.js
 import * as THREE from 'three';
 
 export class Node {
@@ -20,6 +20,9 @@ export class Node {
       opacity: 0.8
     });
     this.plane = new THREE.Mesh(geometry, material);
+
+    // ノードデータをuserData
+    this.plane.userData.nodeData = data;
 
     // 枠線の追加
     const edges = new THREE.EdgesGeometry(geometry);

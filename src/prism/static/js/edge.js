@@ -1,3 +1,4 @@
+//edge.js
 import * as THREE from 'three';
 export class Edge {
   constructor(scene, startNode, endNode, label, arrowThickness = 0.1) {
