@@ -1,4 +1,4 @@
-//src/prism/static/js/plane.js
+//plane.js
 import * as THREE from 'three';
 export class GridPlane {
   constructor(scene, size = 1000, divisions = 50) {
