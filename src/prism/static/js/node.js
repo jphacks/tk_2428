@@ -72,13 +72,22 @@ export class Node {
     }
   }
 
-  setSize(newSize) {
-    this.size = newSize;
-    this.plane.scale.set(newSize, newSize, 1);
-    this.outline.scale.set(newSize, newSize, 1);
+  // ラベルのサイズ変更
+  setLabelSize(newSize) {
+    newSize /= 5.0;
     if (this.textSprite) {
       this.textSprite.scale.set(newSize * 5, newSize * 2.5, 1);
     }
+  }
+
+  // ノードのサイズ変更
+  setSize(newSize) {
+    newSize /= 5.0;
+    this.size = newSize;
+    this.plane.scale.set(newSize, newSize, 1);
+    this.outline.scale.set(newSize, newSize, 1);
+    // this.setLabelSize(newSize);
+    // ノードのサイズ変更に伴ってテキストのサイズを変更するときはコメントアウトを外す
   }
 
   getPosition() {
