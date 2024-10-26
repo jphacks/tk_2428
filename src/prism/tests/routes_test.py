@@ -1,4 +1,4 @@
-# src/tests/test_routes.py
+# src/prism/tests/test_routes.py
 from flask  import Blueprint, render_template, jsonify, request
 from prism.db    import test_connection
 from prism.claude import analyze_text
