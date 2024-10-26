@@ -9,4 +9,9 @@ wheels/
 # venv
 .venv
 
-claudeはこのファイルを無視するように.py
+# 環境変数
+.env
+
+# 検証ツール
+proproject_structure.md
+script.py
