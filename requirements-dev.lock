@@ -29,9 +29,6 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via flask
-colorama==0.4.6
-    # via click
-    # via tqdm
 distro==1.9.0
     # via anthropic
 dnspython==2.7.0
