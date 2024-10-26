@@ -1,9 +1,10 @@
 """src/prism/db.py"""
 from pymongo import MongoClient
+import os
 
 def test_connection():
     # 接続文字
-    uri = "mongodb+srv://Argo:Scenekawaii_11@cluster0.zrenn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    uri =os.getenv("MONGODB_URI")
 
     try:
         # クライアントの作成

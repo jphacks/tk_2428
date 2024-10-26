@@ -2,7 +2,7 @@
 from flask  import Blueprint, render_template, jsonify, request
 from .db    import test_connection
 from .claude import analyze_text
-
+from .scraper import scrape_article, validate_url
 main = Blueprint('main',__name__)
 
 @main.route('/')
@@ -82,3 +82,35 @@ def analyze():
                         テキストは政治に関連する記事などのコピペである必要があります"""
                         }), 422
     return jsonify(graph_data)
+
+
+
+@main.route('/api/analyze-url', methods=['POST'])
+def analyze_url():
+    if not request.is_json:
+        return jsonify({"error": "コンテンツの形式はJSON形式である必要があります"}), 400
+    
+    url = request.json.get('url')
+    if not url:
+        return jsonify({"error": "URLが送信されていません"}), 400
+
+    try:
+        # URLの検証
+        if not validate_url(url):
+            return jsonify({"error": "無効なURLです"}), 400
+            
+        # URLからテキストを取得
+        article_text = scrape_article(url)
+        if not article_text:
+            return jsonify({"error": "記事の取得に失敗しました"}), 422
+            
+        # テキストを解析
+        graph_data = analyze_text(article_text)
+        if graph_data is None:
+            return jsonify({"error": "分析に失敗しました。政治に関連する記事である必要があります"}), 422
+            
+        return jsonify(graph_data)
+        
+    except Exception as e:
+        current_app.logger.error(f"Error processing URL: {str(e)}")
+        return jsonify({"error": "記事の処理中にエラーが発生しました"}), 500

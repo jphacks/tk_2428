@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
     <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js",
-            "three/examples/jsm/controls/OrbitControls": "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js"
+            }
         }
-    }
-    </script>
+        </script>
 </head>
 <body>
     <div id="app">
@@ -25,13 +25,13 @@
                 <input type="range" id="text-size" min="8" max="24" value="10">
             </div>
             <div class="control-item">
-                <label>サイズ: <span>20</span>px</label>
-                <input type="range" id="node-size" min="1" max="40" value="20">
+                <label>サイズ: <span>10</span>px</label>
+                <input type="range" id="node-size" min="1" max="40" value="10">
             </div>
             <h3>エッジ</h3>
             <div class="control-item">
-                <label>ラベル: <span>10</span>px</label>
-                <input type="range" id="edge-label-size" min="8" max="24" value="10">
+                <label>ラベル: <span>20</span>px</label>
+                <input type="range" id="edge-label-size" min="8" max="40" value="20">
             </div>
             <div class="control-item">
                 <label>矢印: <span>20</span>px</label>
