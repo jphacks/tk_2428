@@ -184,7 +184,7 @@ class Graph3D {
 
         document.getElementById('text-size').addEventListener('input', (e) => {
             const size = parseFloat(e.target.value);
-            this.nodes.forEach(node => node.setTextSize(size));
+            this.nodes.forEach(node => node.setLabelSize(size));
         });
     }
 

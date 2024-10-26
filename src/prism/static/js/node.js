@@ -72,14 +72,19 @@ export class Node {
     }
   }
 
+  setLabelSize(newSize) {
+    newSize /= 5.0;
+    if (this.textSprite) {
+      this.textSprite.scale.set(newSize * 5, newSize * 2.5, 1);
+    }
+  }
+
   setSize(newSize) {
     newSize /= 5.0;
     this.size = newSize;
     this.plane.scale.set(newSize, newSize, 1);
     this.outline.scale.set(newSize, newSize, 1);
-    if (this.textSprite) {
-      this.textSprite.scale.set(newSize * 5, newSize * 2.5, 1);
-    }
+    // this.setLabelSize(newSize);
   }
 
   getPosition() {
