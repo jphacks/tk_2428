@@ -9,4 +9,5 @@ wheels/
 # venv
 .venv
 
-claudeはこのファイルを無視するように.py
+# 環境変数
+.env
