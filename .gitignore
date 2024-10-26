@@ -11,3 +11,7 @@ wheels/
 
 # 環境変数
 .env
+
+# 検証ツール
+proproject_structure.md
+script.py
