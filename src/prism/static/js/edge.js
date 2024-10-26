@@ -59,8 +59,8 @@ export class Edge {
   createLabel() {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-      canvas.width = 256;
-      canvas.height = 64;
+      canvas.width = 1024;
+      canvas.height = 256;
 
       // 背景を透明に
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -86,7 +86,7 @@ export class Edge {
       this.labelSprite.position.y += 2;  // 少し上に配置
       
       // ラベルのサイズを設定
-      const scale = document.getElementById('edge-label-size').value * 0.1;
+      const scale = document.getElementById('edge-label-size').value * 0.3;
       this.labelSprite.scale.set(scale * 5, scale * 2.5, 1);
 
       this.scene.add(this.labelSprite);
