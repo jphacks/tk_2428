@@ -1,6 +1,6 @@
 // graph3d.js
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Node } from './node.js';
 import { Edge } from './edge.js';
 import { GridPlane } from './plane.js';
@@ -19,11 +19,73 @@ class Graph3D {
         
         // イベントリスナーとコントロールの設定
         this.setupEventListeners();
-        this.setupControls();
+        this.setupNodeControls();  // 個別のsetupメソッドを呼び出し
+        this.setupViewModeControl();  // 個別のsetupメソッドを呼び出し
+        this.setupEdgeControls();  // 個別のsetupメソッドを呼び出し
         
         // 初期データの読み込みとアニメーション開始
         this.loadTestData();
         this.animate();
+    }
+
+    // エッジコントロールの設定
+    setupEdgeControls() {
+        const edgeSizeSlider = document.getElementById('edge-size');
+        const edgeLabelSizeSlider = document.getElementById('edge-label-size');
+
+        if (edgeSizeSlider) {
+            edgeSizeSlider.addEventListener('input', (e) => {
+                const size = parseFloat(e.target.value) * 0.01;
+                this.edges.forEach(edge => {
+                    edge.arrowThickness = size;
+                    edge.update();
+                });
+            });
+        }
+
+        if (edgeLabelSizeSlider) {
+            edgeLabelSizeSlider.addEventListener('input', () => {
+                this.edges.forEach(edge => {
+                    if (edge.label) {
+                        edge.update();
+                    }
+                });
+            });
+        }
+    }
+
+    // ノードコントロールの設定
+    setupNodeControls() {
+        const nodeSizeSlider = document.getElementById('node-size');
+        const textSizeSlider = document.getElementById('text-size');
+
+        if (nodeSizeSlider) {
+            nodeSizeSlider.addEventListener('input', (e) => {
+                const size = parseFloat(e.target.value);
+                this.nodes.forEach(node => node.setSize(size));
+            });
+        }
+
+        if (textSizeSlider) {
+            textSizeSlider.addEventListener('input', (e) => {
+                const size = parseFloat(e.target.value);
+                this.nodes.forEach(node => node.setTextSize(size));
+            });
+        }
+    }
+
+    // viewモードコントロールの設定
+    setupViewModeControl() {
+        const viewModeSelect = document.getElementById('view-mode');
+        if (viewModeSelect) {
+            viewModeSelect.addEventListener('change', (e) => {
+                if (e.target.value === '2d') {
+                    this.set2DView();
+                } else {
+                    this.set3DView();
+                }
+            });
+        }
     }
 
     // シーンの初期化
@@ -48,7 +110,6 @@ class Graph3D {
         this.camera.position.set(50, 50, 50);
         this.camera.lookAt(0, 0, 0);
 
-        // OrbitControlsの設定
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.setupCameraControls();
     }
@@ -118,61 +179,41 @@ class Graph3D {
 
     // アップロード処理
     async handleUpload() {
-        const text = document.getElementById('text-input').value;
-        if (!text) return;
-
+        const input = document.getElementById('text-input').value;
+        if (!input) return;
+    
         const button = document.getElementById('upload-btn');
         const originalText = button.textContent;
         button.disabled = true;
         button.textContent = '解析中...';
-
+    
         try {
-            const response = await fetch('/api/analyze', {
+            // URLかテキストかを判断
+            const isUrl = input.startsWith('http://') || input.startsWith('https://');
+            const endpoint = isUrl ? '/api/analyze-url' : '/api/analyze';
+            const payload = isUrl ? { url: input } : { text: input };
+    
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text })
+                body: JSON.stringify(payload)
             });
             
             if (!response.ok) {
                 const error = await response.json();
                 throw new Error(error.error || '解析に失敗しました');
             }
-
+    
             const data = await response.json();
             this.clearGraph();
             this.renderGraph(data);
         } catch (error) {
-            console.error('Error analyzing text:', error);
+            console.error('Error analyzing content:', error);
             alert(error.message);
         } finally {
             button.disabled = false;
             button.textContent = originalText;
         }
-    }
-
-    // コントロールパネルの設定
-    setupControls() {
-        this.setupNodeControls();
-        this.setupViewModeControl();
-        this.setupEdgeControls();  // 追加
-    }
-    // エッジコントロールの設定
-    setupEdgeControls() {
-        document.getElementById('edge-size').addEventListener('input', (e) => {
-            const size = parseFloat(e.target.value) * 0.01;
-            this.edges.forEach(edge => {
-                edge.arrowThickness = size;
-                edge.update();
-            });
-        });
-
-        document.getElementById('edge-label-size').addEventListener('input', () => {
-            this.edges.forEach(edge => {
-                if (edge.label) {
-                    edge.update();
-                }
-            });
-        });
     }
 
     // ノードコントロールの設定
@@ -278,6 +319,12 @@ class Graph3D {
 }
 
 // アプリケーション初期化
-document.addEventListener('DOMContentLoaded', () => new Graph3D());
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        new Graph3D();
+    } catch (error) {
+        console.error('Failed to initialize Graph3D:', error);
+    }
+});
 
 export default Graph3D;

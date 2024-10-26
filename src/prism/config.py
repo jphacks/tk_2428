@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv('src/prism/config.setting')
+load_dotenv('.env')
 
 class Config:
     #環境変数をブール値として解釈
