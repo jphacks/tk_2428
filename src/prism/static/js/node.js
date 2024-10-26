@@ -73,6 +73,7 @@ export class Node {
   }
 
   setSize(newSize) {
+    newSize /= 5.0;
     this.size = newSize;
     this.plane.scale.set(newSize, newSize, 1);
     this.outline.scale.set(newSize, newSize, 1);
