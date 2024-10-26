@@ -72,6 +72,7 @@ export class Node {
     }
   }
 
+  // ラベルのサイズ変更
   setLabelSize(newSize) {
     newSize /= 5.0;
     if (this.textSprite) {
@@ -79,12 +80,14 @@ export class Node {
     }
   }
 
+  // ノードのサイズ変更
   setSize(newSize) {
     newSize /= 5.0;
     this.size = newSize;
     this.plane.scale.set(newSize, newSize, 1);
     this.outline.scale.set(newSize, newSize, 1);
     // this.setLabelSize(newSize);
+    // ノードのサイズ変更に伴ってテキストのサイズを変更するときはコメントアウトを外す
   }
 
   getPosition() {
