@@ -26,7 +26,7 @@ class Graph3D {
         this.setupNodeControls();  // 個別のsetupメソッドを呼び出し
         this.setupViewModeControl();  // 個別のsetupメソッドを呼び出し
         this.setupEdgeControls();  // 個別のsetupメソッドを呼び出し
-        
+
         // 初期データの読み込みとアニメーション開始
         this.loadTestData();
         this.animate();
@@ -232,18 +232,18 @@ class Graph3D {
     async handleUpload() {
         const input = document.getElementById('text-input').value;
         if (!input) return;
-    
+
         const button = document.getElementById('upload-btn');
         const originalText = button.textContent;
         button.disabled = true;
         button.textContent = '解析中...';
-    
+
         try {
             // URLかテキストかを判断
             const isUrl = input.startsWith('http://') || input.startsWith('https://');
             const endpoint = isUrl ? '/api/analyze-url' : '/api/analyze';
             const payload = isUrl ? { url: input } : { text: input };
-    
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -254,7 +254,7 @@ class Graph3D {
                 const error = await response.json();
                 throw new Error(error.error || '解析に失敗しました');
             }
-    
+
             const data = await response.json();
             this.clearGraph();
             this.renderGraph(data);
@@ -347,6 +347,7 @@ class Graph3D {
         data.nodes.forEach(nodeData => {
             const node = new Node(this.scene, this.camera, nodeData);
             node.setPosition(nodeData.position.x, nodeData.position.y, nodeData.position.z);
+            node.plane.userData = { nodeData: nodeData };// ノードのplaneにユーザーデータを追加
             this.nodes.set(nodeData.id, node);
         });
 
