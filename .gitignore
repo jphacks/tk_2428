@@ -13,5 +13,5 @@ wheels/
 .env
 
 # 検証ツール
-proproject_structure.md
+project_structure.md
 script.py
