@@ -11,7 +11,9 @@ export class Node {
     const color = data.type === 'policy' ? 0x4CAF50 : 0x2196F3;
 
     // 四角形のジオメトリとマテリアルを作成
-    const geometry = new THREE.PlaneGeometry(this.size * 2, this.size * 2);
+    const geometry = data.type === 'policy' 
+      ? new THREE.PlaneGeometry(this.size * 2, this.size * 2)
+      : new THREE.CircleGeometry(this.size * 2, 32);
     const material = new THREE.MeshPhongMaterial({
       color: color,
       side: THREE.DoubleSide,
@@ -100,7 +102,7 @@ export class Node {
 
     // グラフ用のMeshを作成し、保存
     this.graph = new THREE.Mesh(chartGeometry, chartMaterial);
-    this.scene.add(this.graph);
+    this.graph.position.set(this.plane.positoin.x + 2, this.plane.position.y, this.plane.position.z);
   }
 
   setPosition(x, y, z) {
