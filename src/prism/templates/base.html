@@ -11,7 +11,8 @@
         {
             "imports": {
                 "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js"
+                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js",
+                "three/examples/jsm/controls/TransformControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/TransformControls.js"
             }
         }
     </script>
@@ -41,6 +42,9 @@
             <div class="control-item">
                 <label>矢印: <span>20</span>px</label>
                 <input type="range" id="edge-size" min="1" max="40" value="20">
+            </div>
+            <div class="control-item">
+                <button id="toggle-move-node-btn"><label>ノード移動開始</label></button>
             </div>
         </div>
 
