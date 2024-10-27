@@ -8,6 +8,15 @@ import { GridPlane } from './plane.js';
 
 class Graph3D {
     constructor() {
+        this.initScene();
+        this.initRenderer();
+        this.initCamera();
+        this.initLights();
+        this.initGrid();
+        
+        // TransformControlsの初期化
+        this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
+        this.scene.add(this.transformControls);
         try {
             this.initScene();
             this.initRenderer();
