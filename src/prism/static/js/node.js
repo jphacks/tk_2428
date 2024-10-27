@@ -104,7 +104,7 @@ export class Node {
   }
 
   setPosition(x, y, z) {
-    this.plane.position.set(x, y, z);
+    this.plane.position.set(x, y, z); 
     this.outline.position.set(x, y, z);
     if (this.textSprite) {
       this.textSprite.position.set(x, y, z);

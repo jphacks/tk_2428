@@ -11,7 +11,8 @@
         {
             "imports": {
                 "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js"
+                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js",
+                "three/examples/jsm/controls/TransformControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/TransformControls.js"
             }
         }
     </script>
@@ -72,36 +73,32 @@
                     </div>
                 </div>
             </div>
-
-            <div class="sidebar-section">
-                <h3>エッジ設定</h3>
-                <div class="control-group">
-                    <div class="control-item">
-                        <label>
-                            <span class="control-label">ラベルサイズ</span>
-                            <span class="control-value">20px</span>
-                        </label>
-                        <div class="slider-container">
-                            <input type="range" id="edge-label-size" min="8" max="40" value="20">
-                            <div class="slider-track"></div>
-                        </div>
-                    </div>
-                    <div class="control-item">
-                        <label>
-                            <span class="control-label">矢印サイズ</span>
-                            <span class="control-value">20px</span>
-                        </label>
-                        <div class="slider-container">
-                            <input type="range" id="edge-size" min="1" max="40" value="20">
-                            <div class="slider-track"></div>
-                        </div>
-                    </div>
-                </div>
+            <h3>エッジ</h3>
+            <div class="control-item">
+                <label>ラベル: <span>20</span>px</label>
+                <input type="range" id="edge-label-size" min="8" max="40" value="20">
             </div>
+            <div class="control-item">
+                <label>矢印: <span>20</span>px</label>
+                <input type="range" id="edge-size" min="1" max="40" value="20">
+            </div>
+            <div class="control-item">
+                <button id="toggle-move-node-btn"><label>ノード移動開始</label></button>
+            </div>
+        </div>
 
-            <button class="node-move-button">
+        <div id="graph-container"></div>
+
+        <div class="control-panel">
+            <select id="view-mode">
+                <option value="3d">3D</option>
+                <option value="2d">2D</option>
+            </select>
+        </div>
+
+            <button id="toggle-move-node-btn" class="node-move-button">
                 <i class="fas fa-arrows-alt"></i>
-                ノードを移動
+                <label>ノードを移動</label>
             </button>
         </aside>
 
