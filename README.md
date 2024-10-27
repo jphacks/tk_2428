@@ -138,4 +138,4 @@ Tips
 * なし
 #### 特に力を入れた部分
 * https://github.com/jphacks/tk_2428/pull/5/commits/3cf34934b05cecbcd2b21f3dee02946643c530b3
-* 
+* https://github.com/jphacks/tk_2428/pull/7/commits/c93df6ff7d99a4e63087358a01d8cd997f267d4d
