@@ -1,9 +1,8 @@
-# サンプル（プロダクト名）
-PRISM
-
+# ポリティカルビジュア・ライザー
 [![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2024/07/JPHACKS2024_ogp.jpg)](https://www.youtube.com/watch?v=DZXUkEj-CSI)
 
 ## 製品概要
+政治に関する記事を視覚的にわかりやすくするアプリ
 ### 背景(製品開発のきっかけ、課題等）
 ### 製品説明（具体的な製品の説明）
 ### 特長
@@ -36,7 +35,7 @@ PRISM
   <img src="https://img.shields.io/badge/-anthropic-191919.svg?logo=anthropic&style=for-the-badge">
 </p>
 
-#### フレームワーク・ライブラリ・モジュール
+####  
 <p syele="display: inline">
 <!-- フロントエンドのフレームワーク一覧 -->
   <img src="https://img.shields.io/badge/-threedotjs-000000.svg?logo=threedotjs&style=for-the-badge">
