@@ -3,6 +3,8 @@
     --primary-color: #2196F3;
     --secondary-color: #1976D2;
     --background-color: #f5f5f5;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
     --sidebar-width: 280px;
     --header-height: 60px;
     --footer-height: 70px;
@@ -11,9 +13,9 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 /* App Container */
@@ -22,7 +24,7 @@ body {
     grid-template-areas:
         "header header"
         "sidebar main"
-        "sidebar footer";
+        "footer footer";
     grid-template-columns: var(--sidebar-width) 1fr;
     grid-template-rows: var(--header-height) 1fr var(--footer-height);
     height: 100vh;
@@ -46,34 +48,10 @@ body {
     gap: 15px;
 }
 
-.menu-toggle {
-    background: none;
-    border: none;
-    font-size: 1.25rem;
-    cursor: pointer;
-    color: #666;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo img {
-    height: 30px;
-}
-
-.logo span {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
-}
-
 .header-right {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .view-toggle {
@@ -89,7 +67,6 @@ body {
     padding: 5px 15px;
     border-radius: 17px;
     cursor: pointer;
-    font-size: 0.9rem;
 }
 
 .view-toggle button.active {
@@ -97,31 +74,38 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.help-button, .share-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
 /* Sidebar Styles */
 .sidebar {
     grid-area: sidebar;
     background: white;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid var(--border-color);
     padding: 20px;
     overflow-y: auto;
 }
 
 .sidebar-section {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .sidebar-section h3 {
-    font-size: 1rem;
-    color: #333;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #f0f0f0;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-color);
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
 .control-item {
@@ -133,9 +117,8 @@ body {
 .control-item label {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    font-size: 12px;
     color: #666;
-    font-size: 0.9rem;
 }
 
 .slider-container {
@@ -143,38 +126,98 @@ body {
     height: 20px;
 }
 
-.slider-track {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 4px;
-    width: 100%;
-    background: #f0f0f0;
-    border-radius: 2px;
-}
-
 input[type="range"] {
-    position: relative;
     -webkit-appearance: none;
     width: 100%;
-    height: 20px;
-    background: transparent;
-    z-index: 2;
+    height: 2px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
+    width: 12px;
+    height: 12px;
     background: var(--primary-color);
+    border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Main Content Area */
+#graph-container {
+    grid-area: main;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Footer/Input Area */
+.input-area {
+    grid-area: footer;
+    background: white;
+    border-top: 1px solid var(--border-color);
+    padding: 15px 20px;
+}
+
+.input-container {
+    display: flex;
+    gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#text-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+#text-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.primary-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.primary-button:hover {
+    background: var(--secondary-color);
+}
+
+.history-button {
+    width: 40px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-button:hover {
+    background: #e0e0e0;
+}
+
+/* Node Movement Button */
 .node-move-button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: var(--primary-color);
     color: white;
     border: none;
@@ -184,7 +227,7 @@ input[type="range"]::-webkit-slider-thumb {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 0.9rem;
+    font-size: 14px;
     transition: background-color 0.2s;
 }
 
@@ -192,175 +235,8 @@ input[type="range"]::-webkit-slider-thumb {
     background: var(--secondary-color);
 }
 
-/* Main Content Area */
-#graph-container {
-    grid-area: main;
-    position: relative;
-}
-
-/* Footer/Input Area */
-.input-area {
-    grid-area: footer;
-    background: white;
-    border-top: 1px solid #e0e0e0;
-    padding: 15px 20px;
-}
-
-.input-container {
-    display: flex;
-    gap: 10px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-#text-input {
-    flex: 1;
-    padding: 10px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-#text-input:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-#upload-btn,
-.history-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background-color 0.2s;
-}
-
-#upload-btn {
-    background: var(--primary-color);
-    color: white;
-}
-
-#upload-btn:hover {
-    background: var(--secondary-color);
-}
-
-.history-button {
-    background: #f0f0f0;
-    color: #666;
-}
-
-.history-button:hover {
-    background: #e0e0e0;
-}
-
-/* 既存のCSSの:root部分に追加 */
-:root {
-    /* 既存の変数は維持 */
-    --primary-color: #2196F3;
-    --secondary-color: #1976D2;
-    --background-color: #f5f5f5;
-    --sidebar-width: 280px;
-    --header-height: 60px;
-    --footer-height: 70px;
-
-    /* 新しい変数を追加 */
-    --node-text-size: 10px;
-    --node-size: 10px;
-    --edge-label-size: 20px;
-    --edge-size: 20px;
-}
-
-/* ノードのテキストスタイル */
-.node-text {
-    font-size: var(--node-text-size);
-    transition: font-size 0.2s ease;
-}
-
-/* ノードのサイズ */
-.node {
-    width: var(--node-size);
-    height: var(--node-size);
-    transition: width 0.2s ease, height 0.2s ease;
-}
-
-/* エッジラベルのスタイル */
-.edge-label {
-    font-size: var(--edge-label-size);
-    transition: font-size 0.2s ease;
-}
-
-/* エッジの太さ */
-.edge {
-    stroke-width: var(--edge-size);
-    transition: stroke-width 0.2s ease;
-}
-
-/* App Container */
-#app {
-    display: grid;
-    grid-template-areas:
-        "header header"
-        "sidebar main"
-        "sidebar footer";
-    grid-template-columns: var(--sidebar-width) 1fr;
-    grid-template-rows: var(--header-height) 1fr var(--footer-height);
-    height: 100vh;
-    min-height: 100vh; /* 追加 */
-    background-color: var(--background-color);
-}
-
-/* Main Content Area */
-#graph-container {
-    grid-area: main;
-    position: relative;
-    background-color: #ffffff; /* 背景色を白に */
-    overflow: hidden; /* はみ出し防止 */
-    min-height: 0; /* グリッドレイアウトでの最小高さを0に */
-}
-
-/* Footer/Input Area */
-.input-area {
-    grid-area: footer;
-    background: white;
-    border-top: 1px solid #e0e0e0;
-    padding: 15px 20px;
-    z-index: 10; /* 重なり順を指定 */
-    min-height: var(--footer-height);
-    box-sizing: border-box;
-}
-
-/* その他のグリッド要素にも明示的なgrid-areaを指定 */
-.app-header {
-    grid-area: header;
-}
-
-.sidebar {
-    grid-area: sidebar;
-}
-
-/* グリッドエリアの高さ調整 */
-main, aside, footer {
-    min-height: 0; /* グリッドレイアウトでの最小高さを0に */
-}
-
-#graph-container {
-    grid-area: main;
-    position: relative;
-    background-color: #ffffff;
-    overflow: hidden;
-    min-height: 0;
-    display: flex;  /* 追加 */
-    justify-content: center;  /* 追加 */
-    align-items: center;  /* 追加 */
-}
-
-#graph-container canvas {
-    width: 100% !important;
-    height: 100% !important;
-    background-color: #ffffff;  /* 追加 */
+/* Icons */
+.icon {
+    font-size: 16px;
+    line-height: 1;
 }
