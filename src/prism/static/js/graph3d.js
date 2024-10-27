@@ -25,7 +25,9 @@ class Graph3D {
     
         // 初期サイズの設定
         const textSize = document.getElementById('text-size').value;
+        const nodeSize = document.getElementById('node-size').value;
         this.initialTextSize = parseInt(textSize);
+        this.initialNodeSize = parseInt(nodeSize);
     
         // レイキャスターの初期化
         this.raycaster = new THREE.Raycaster();
@@ -54,20 +56,20 @@ class Graph3D {
     
         // 初期データの読み込みとサイズ設定
         this.loadTestData().then(() => {
-            // ノードの初期サイズを設定
             this.nodes.forEach(node => {
                 node.setLabelSize(this.initialTextSize);
+                node.setSize(this.initialNodeSize);
             });
             
-            // エッジの初期サイズを設定
-            const edgeSize = document.getElementById('edge-size').value * 0.01;
-            this.edges.forEach(edge => {
-                edge.arrowThickness = edgeSize;
-                edge.update();
-            });
-        }).catch(error => {
-            console.error('Error loading initial data:', error);
+        // エッジの初期サイズを設定
+        const edgeSize = document.getElementById('edge-size').value * 0.01;
+        this.edges.forEach(edge => {
+            edge.arrowThickness = edgeSize;
+            edge.update();
         });
+    }).catch(error => {
+        console.error('Error loading initial data:', error);
+    });
     
         // スライダーの初期値を表示に反映
         const sliders = document.querySelectorAll('input[type="range"]');

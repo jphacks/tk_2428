@@ -130,12 +130,12 @@ export class Node {
 
   // ノードのサイズ変更
   setSize(newSize) {
-    newSize /= 5.0;
-    this.size = newSize;
-    this.plane.scale.set(newSize, newSize, 1);
-    this.outline.scale.set(newSize, newSize, 1);
+    const scaledSize = newSize / 5.0;  // スケーリング係数を適用
+    this.size = scaledSize;
+    this.plane.scale.set(scaledSize, scaledSize, 1);
+    this.outline.scale.set(scaledSize, scaledSize, 1);
     if (this.graph) {
-      this.graph.scale.set(newSize, newSize, 1);
+      this.graph.scale.set(scaledSize, scaledSize, 1);
     }
   }
 
