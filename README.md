@@ -1,10 +1,15 @@
 # PRISM
-<img src="https://github.com/user-attachments/assets/9a59a741-2543-4c2b-951d-8005968c97e5" width="300">
+### ポリティカルビジュア・ライザー
+<img src="https://github.com/user-attachments/assets/9a59a741-2543-4c2b-951d-8005968c97e5" width="200">
 
 ## 製品概要
 ### 背景(製品開発のきっかけ、課題等）
 18歳になり政治に参加する上で、どの候補者がどのような政策を掲げ、世の中がどう進行しているか理解をしたい。
 しかし、政治に関する情報収集において、信頼性の高い情報源の記事は確実性が高い一方で、専門的な表現が多く含まれるため、若者が進んで読むことを妨げている。
+
+![](image.png)
+引用 : https://www.yomiuri.co.jp/election/shugiin/20241025-OYT1T50059/
+
 難解な情報を理解するには、相関図を用いてビジュアライズすればよいのではないかと考えた。
 
 ### 製品説明（具体的な製品の説明）
@@ -52,11 +57,12 @@ PRISMは、難解な記事を貼り付けるだけで、グラフベースで内
 <img src="https://img.shields.io/badge/-rye-000000.svg?logo=rye&style=for-the-badge">
 </p>
 
-#### デバイス
+#### 対応ブラウザ
+<img src="https://img.shields.io/badge/-googlechrome-000000.svg?logo=googlechrome&style=for-the-badge">
+<img src="https://img.shields.io/badge/-safari-000000.svg?logo=safari&style=for-the-badge">
 
-|[<img src="https://img.shields.io/badge/-chrome-430098.svg?logo=googlechrome&style=for-the-badge" alt="Chrome" width="80px" height="24px" />](http://gotbahn.github.io/browsers-support-badges/)</br>Android Chrome |[<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://gotbahn.github.io/browsers-support-badges/)</br>Chrome |[<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://gotbahn.github.io/browsers-support-badges/)</br>ios Chrome　| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://gotbahn.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://gotbahn.github.io/browsers-support-badges/)</br>iOS Safari |
-| --------- | --------- | --------- | --------- | --------- |
-| 最新版　| 最新版 | ❌ | ❌ | ❌ |
+※Android, iOSはresponsible design非対応
+
 
 ### 独自技術
 #### ハッカソンで開発した独自機能・技術
