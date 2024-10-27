@@ -239,10 +239,39 @@ class Graph3D {
     setupSliderListeners() {
         const sliders = document.querySelectorAll('input[type="range"]');
         sliders.forEach(slider => {
-            const label = slider.previousElementSibling;
-            const span = label.querySelector('span');
-            slider.addEventListener('input', () => {
-                span.textContent = slider.value;
+            // 値表示要素を探す
+            const label = slider.closest('.control-item').querySelector('label');
+            const span = label ? label.querySelector('span') : null;
+
+            // 初期値を設定
+            if (span) {
+                span.textContent = `${slider.value}px`;
+            }
+
+            // 値変更時のイベントリスナー
+            slider.addEventListener('input', (event) => {
+                if (span) {
+                    span.textContent = `${event.target.value}px`;
+                }
+
+                // スライダーの種類に応じた処理
+                switch (event.target.id) {
+                    case 'node-size':
+                        this.nodes.forEach(node => node.setSize(event.target.value));
+                        break;
+                    case 'text-size':
+                        this.nodes.forEach(node => node.setLabelSize(event.target.value));
+                        break;
+                    case 'edge-size':
+                        this.edges.forEach(edge => {
+                            edge.arrowThickness = event.target.value * 0.01;
+                            edge.update();
+                        });
+                        break;
+                    case 'edge-label-size':
+                        this.edges.forEach(edge => edge.update());
+                        break;
+                }
             });
         });
     }
