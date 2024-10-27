@@ -13,6 +13,6 @@ for (var i = 0; i < link.length; i++) {
         cursor.classList.add('cursor--hover');
     });
     link[i].addEventListener('mouseout', function (e) {
-        cursor.classList.remove('cursor--hover');   
+        cursor.classList.remove('cursor--hover');
     });
 }
