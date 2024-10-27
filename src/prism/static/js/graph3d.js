@@ -13,41 +13,29 @@ class Graph3D {
         this.initCamera();
         this.initLights();
         this.initGrid();
-        
+
         // TransformControlsの初期化
         this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
         this.scene.add(this.transformControls);
-        try {
-            this.initScene();
-            this.initRenderer();
-            this.initCamera();
-            this.initLights();
-            this.initGrid();
 
-            // TransformControlsの初期化
-            this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
-            this.scene.add(this.transformControls);
+        // データ構造の初期化
+        this.nodes = new Map();
+        this.edges = [];
 
-            // データ構造の初期化
-            this.nodes = new Map();
-            this.edges = [];
+        // レイキャスターの初期化
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
 
-            // レイキャスターの初期化
-            this.raycaster = new THREE.Raycaster();
-            this.mouse = new THREE.Vector2();
+        // イベントリスナーとコントロールの設定
+        this.setupEventListeners();
+        this.setupNodeControls();
+        this.setupViewModeControl();
+        this.setupEdgeControls();
+        this.setupTransformControls();
 
-            // イベントリスナーとコントロールの設定
-            this.setupEventListeners();
-            this.setupNodeControls();
-            this.setupViewModeControl();
-            this.setupEdgeControls();
-
-            // 初期データの読み込みとアニメーション開始
-            this.loadTestData();
-            this.animate();
-        } catch (error) {
-            console.error('Graph3D initialization error:', error);
-        }
+        // 初期データの読み込みとアニメーション開始
+        this.loadTestData();
+        this.animate();
     }
 
     setupTransformControls() {
@@ -57,10 +45,10 @@ class Graph3D {
             console.error('toggleMoveNodeBtn not found');
             return;
         }
-
+    
         toggleMoveNodeBtn.addEventListener('click', () => {
             console.log('ボタンがクリックされました');
-
+    
             this.isMovingNodes = !this.isMovingNodes;
             if (this.isMovingNodes) {
                 toggleMoveNodeBtn.textContent = 'ノード移動停止';
@@ -70,44 +58,44 @@ class Graph3D {
                 this.disableNodeTransform();
             }
         });
-
+    
         // TransformControlsのマウスダウンイベント
         this.transformControls.addEventListener('mouseDown', (e) => {
             this.controls.enablePan = false;  // OrbitControlsを無効化
             this.controls.enableRotate = false;  // OrbitControlsを無効化
         });
-
+    
         // TransformControlsのマウスアップイベント
         this.transformControls.addEventListener('mouseUp', (e) => {
             this.controls.enablePan = true;  // OrbitControlsを有効化
             this.controls.enableRotate = true;  // OrbitControlsを有効化
         });
-
+    
         // ノードが移動された時のイベント
         this.transformControls.addEventListener('change', () => {
             this.renderer.render(this.scene, this.camera);
         });
     }
-
+    
     // ノード移動を有効にするメソッド
     enableNodeTransform() {
         window.addEventListener('click', this.onNodeSelect.bind(this));
     }
-
+    
     // ノード移動を停止するメソッド
     disableNodeTransform() {
         this.transformControls.detach();  // ノードからTransformControlsを外す
         window.removeEventListener('click', this.onNodeSelect.bind(this));  // イベントリスナーを解除
     }
-
+    
     // ノードをクリックしてTransformControlsを適用
     onNodeSelect(event) {
         if (!this.isMovingNodes) return;
-
+    
         this.updateMousePosition(event);
         this.raycaster.setFromCamera(this.mouse, this.camera);
         const intersects = this.raycaster.intersectObjects(Array.from(this.nodes.values()).map(node => node.plane));
-
+    
         if (intersects.length > 0) {
             const selectedNode = intersects[0].object.userData.nodeData;
             const node = this.nodes.get(selectedNode.id);
@@ -190,19 +178,11 @@ class Graph3D {
     // レンダラーの初期化
     initRenderer() {
         const container = document.getElementById('graph-container');
-        if (!container) {
-            console.error('Graph container not found');
-            return;
-        }
-
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: true
-        });
-        this.renderer.setClearColor(0xffffff, 1);
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(this.renderer.domElement);
     }
+
     // カメラの初期化
     initCamera() {
         const container = document.getElementById('graph-container');
@@ -257,25 +237,14 @@ class Graph3D {
 
     // スライダーのイベントリスナー設定
     setupSliderListeners() {
-        try {
-            const sliders = document.querySelectorAll('.control-item input[type="range"]');
-            if (!sliders.length) {
-                console.warn('No slider elements found');
-                return;
-            }
-
-            sliders.forEach(slider => {
-                const label = slider.closest('.control-item').querySelector('label');
-                const span = label?.querySelector('span.control-value');
-                if (span) {
-                    slider.addEventListener('input', () => {
-                        span.textContent = `${slider.value}px`;
-                    });
-                }
+        const sliders = document.querySelectorAll('input[type="range"]');
+        sliders.forEach(slider => {
+            const label = slider.previousElementSibling;
+            const span = label.querySelector('span');
+            slider.addEventListener('input', () => {
+                span.textContent = slider.value;
             });
-        } catch (error) {
-            console.error('Error setting up slider listeners:', error);
-        }
+        });
     }
 
     // マウス位置の更新
@@ -390,25 +359,12 @@ class Graph3D {
 
     // 表示モード切り替えの設定
     setupViewModeControl() {
-        const viewButtons = document.querySelectorAll('.view-toggle button');
-        if (!viewButtons.length) {
-            console.warn('View mode buttons not found');
-            return;
-        }
-
-        viewButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                // 既存のアクティブボタンを非アクティブに
-                viewButtons.forEach(btn => btn.classList.remove('active'));
-                // クリックされたボタンをアクティブに
-                e.target.classList.add('active');
-
-                if (e.target.dataset.view === '2d') {
-                    this.set2DView();
-                } else {
-                    this.set3DView();
-                }
-            });
+        document.getElementById('view-mode').addEventListener('change', (e) => {
+            if (e.target.value === '2d') {
+                this.set2DView();
+            } else {
+                this.set3DView();
+            }
         });
     }
 
@@ -492,6 +448,13 @@ class Graph3D {
     }
 }
 
-
+// アプリケーション初期化
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        new Graph3D();
+    } catch (error) {
+        console.error('Failed to initialize Graph3D:', error);
+    }
+});
 
 export default Graph3D;
