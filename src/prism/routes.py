@@ -37,6 +37,8 @@ def test_graph():
                 "type": "policy",
                 "name": "AI規制法案",
                 "description": "AI開発に関する規制法案",
+                "graph-labels": ["Category A", "Category B", "Category C", "Category D", "Category E", "Category F"],
+                "graph-value": [10, 35, 23, 7, 2, 23],
                 "position": {"x": -30, "y": 0, "z": 30}
             },
             {

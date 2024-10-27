@@ -1,4 +1,3 @@
-<!-- src/prism/templates/base.html-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,54 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>政治関連記事ビジュアライザー</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
+    
+    <!-- Chart.jsの読み込みを修正 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Three.jsの設定 -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
     <script type="importmap">
         {
             "imports": {
                 "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js"
+                "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js",
+                "three/examples/jsm/controls/TransformControls.js": "https://unpkg.com/three@0.128.0/examples/jsm/controls/TransformControls.js"
             }
         }
-        </script>
+    </script>
 </head>
 <body>
     <div id="app">
-        <div class="side-menu">
-            <h3>ノード</h3>
-            <div class="control-item">
-                <label>文字: <span>10</span>px</label>
-                <input type="range" id="text-size" min="8" max="24" value="10">
+        <!-- ヘッダー -->
+        <header class="app-header">
+            <div class="header-left">
+                <button class="menu-toggle">≡</button>
+                <div class="logo">
+                    <span>PRISM</span>
+                </div>  
             </div>
-            <div class="control-item">
-                <label>サイズ: <span>10</span>px</label>
-                <input type="range" id="node-size" min="1" max="40" value="10">
+            <div class="header-right">
+                <!-- view-modeセレクターを修正 -->
+                <select id="view-mode" class="view-toggle">
+                    <option value="3d" selected>3D</option>
+                    <option value="2d">2D</option>
+                </select>
+                <button class="help-button">?</button>
+                <button class="share-button">共有</button>
             </div>
-            <h3>エッジ</h3>
-            <div class="control-item">
-                <label>ラベル: <span>20</span>px</label>
-                <input type="range" id="edge-label-size" min="8" max="40" value="20">
-            </div>
-            <div class="control-item">
-                <label>矢印: <span>20</span>px</label>
-                <input type="range" id="edge-size" min="1" max="40" value="20">
-            </div>
-        </div>
+        </header>
 
-        <div id="graph-container"></div>
+        <!-- サイドバー -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>ノード設定</h3>
+                <div class="control-group">
+                    <div class="control-item">
+                        <label>文字サイズ: <span>24px</span></label>
+                        <div class="slider-container">
+                            <div class="slider-track"></div>
+                            <input type="range" id="text-size" min="12" max="48" value="24" step="1">
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <label>ノードサイズ: <span>20px</span></label>
+                        <div class="slider-container">
+                            <div class="slider-track"></div>
+                            <input type="range" id="node-size" min="1" max="40" value="20" step="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="control-panel">
-            <select id="view-mode">
-                <option value="3d">3D</option>
-                <option value="2d">2D</option>
-            </select>
-        </div>
+            <div class="sidebar-section">
+                <h3>エッジ設定</h3>
+                <div class="control-group">
+                    <div class="control-item">
+                        <label>ラベルサイズ: <span>10px</span></label>
+                        <div class="slider-container">
+                            <div class="slider-track"></div>
+                            <input type="range" id="edge-label-size" min="8" max="40" value="10">
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <label>矢印サイズ: <span>20px</span></label>
+                        <div class="slider-container">
+                            <div class="slider-track"></div>
+                            <input type="range" id="edge-size" min="1" max="40" value="20">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="input-area">
-            <input type="text" id="text-input" placeholder="テキストを入力">
-            <button id="upload-btn">アップロード</button>
-        </div>
+            <div class="sidebar-section">
+                <button id="toggle-move-node-btn" class="node-move-button">
+                    <span class="icon">⇄</span>
+                    ノードを移動
+                </button>
+            </div>
+        </aside>
+
+        <!-- メインコンテンツ -->
+        <main id="graph-container"></main>
+
+        <!-- 入力エリア -->
+        <footer class="input-area">
+            <div class="input-container">
+                <input type="text" id="text-input" placeholder="テキストまたはURLを入力">
+                <button id="upload-btn" class="primary-button">
+                    <span class="icon">↑</span>
+                    解析開始
+                </button>
+                <button class="history-button">
+                    <span class="icon">↻</span>
+                </button>
+            </div>
+        </footer>
     </div>
 
+    <!-- モジュールとしてJavaScriptを読み込む -->
     <script type="module" src="{{ url_for('static', filename='js/graph3d.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/ui-controls.js') }}"></script>
 </body>
 </html>

@@ -29,6 +29,10 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via flask
+colorama==0.4.6
+    # via click
+    # via pytest
+    # via tqdm
 distro==1.9.0
     # via anthropic
 dnspython==2.7.0
@@ -51,6 +55,8 @@ idna==3.10
     # via anyio
     # via httpx
     # via requests
+iniconfig==2.0.0
+    # via pytest
 itsdangerous==2.2.0
     # via flask
 jinja2==3.1.4
@@ -62,11 +68,16 @@ markupsafe==3.0.2
     # via werkzeug
 packaging==24.1
     # via huggingface-hub
+    # via pytest
+pluggy==1.5.0
+    # via pytest
 pydantic==2.9.2
     # via anthropic
 pydantic-core==2.23.4
     # via pydantic
 pymongo==4.10.1
+    # via prism
+pytest==8.3.3
     # via prism
 python-dotenv==1.0.1
     # via prism
