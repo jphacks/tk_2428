@@ -25,6 +25,7 @@ class Graph3D {
         // レイキャスターの初期化
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
+        this.isNodeClickEnabled = true;
 
         // クリックタイマーの初期化
         this.clickTimer = null;
@@ -47,11 +48,11 @@ class Graph3D {
             console.error('toggleMoveNodeBtn not found');
             return;
         }
-    
+
         toggleMoveNodeBtn.addEventListener('click', () => {
             console.log('ボタンがクリックされました');
-    
             this.isMovingNodes = !this.isMovingNodes;
+            this.isNodeClickEnabled = !this.isMovingNodes;
             if (this.isMovingNodes) {
                 toggleMoveNodeBtn.textContent = 'ノード移動停止';
                 this.enableNodeTransform();
@@ -60,44 +61,44 @@ class Graph3D {
                 this.disableNodeTransform();
             }
         });
-    
+
         // TransformControlsのマウスダウンイベント
         this.transformControls.addEventListener('mouseDown', (e) => {
             this.controls.enablePan = false;  // OrbitControlsを無効化
             this.controls.enableRotate = false;  // OrbitControlsを無効化
         });
-    
+
         // TransformControlsのマウスアップイベント
         this.transformControls.addEventListener('mouseUp', (e) => {
             this.controls.enablePan = true;  // OrbitControlsを有効化
             this.controls.enableRotate = true;  // OrbitControlsを有効化
         });
-    
+
         // ノードが移動された時のイベント
         this.transformControls.addEventListener('change', () => {
             this.renderer.render(this.scene, this.camera);
         });
     }
-    
+
     // ノード移動を有効にするメソッド
     enableNodeTransform() {
         window.addEventListener('click', this.onNodeSelect.bind(this));
     }
-    
+
     // ノード移動を停止するメソッド
     disableNodeTransform() {
         this.transformControls.detach();  // ノードからTransformControlsを外す
         window.removeEventListener('click', this.onNodeSelect.bind(this));  // イベントリスナーを解除
     }
-    
+
     // ノードをクリックしてTransformControlsを適用
     onNodeSelect(event) {
         if (!this.isMovingNodes) return;
-    
+
         this.updateMousePosition(event);
         this.raycaster.setFromCamera(this.mouse, this.camera);
         const intersects = this.raycaster.intersectObjects(Array.from(this.nodes.values()).map(node => node.plane));
-    
+
         if (intersects.length > 0) {
             const selectedNode = intersects[0].object.userData.nodeData;
             const node = this.nodes.get(selectedNode.id);
@@ -222,7 +223,7 @@ class Graph3D {
         this.grid = new GridPlane(this.scene);
     }
 
-   // イベントリスナーの設定
+    // イベントリスナーの設定
     setupEventListeners() {
         // ウィンドウリサイズ対応
         window.addEventListener('resize', this.handleResize.bind(this));
@@ -311,28 +312,10 @@ class Graph3D {
     // ノードダブルクリックイベント
     onNodeDoubleClick(event) {
         event.preventDefault(); // デフォルトのダブルクリック動作を防止
-        
-        this.updateMousePosition(event);
-        this.raycaster.setFromCamera(this.mouse, this.camera);
-        
-        const intersects = this.raycaster.intersectObjects(
-            Array.from(this.nodes.values()).map(node => node.plane)
-        );
-    
-        if (intersects.length > 0) {
-            const nodeData = intersects[0].object.userData.nodeData;
-            if (nodeData && nodeData.description) {
-                // descriptionとnameを組み合わせて表示
-                const message = `${nodeData.name}\n\n${nodeData.description}`;
-                alert(message);
-            }
-        }
-    }
 
-    // ノードクリックイベント
-    onNodeClick(event) {
         this.updateMousePosition(event);
         this.raycaster.setFromCamera(this.mouse, this.camera);
+
         const intersects = this.raycaster.intersectObjects(
             Array.from(this.nodes.values()).map(node => node.plane)
         );
@@ -340,6 +323,25 @@ class Graph3D {
         if (intersects.length > 0) {
             const intersectedNode = this.nodes.get(intersects[0].object.userData.nodeData.id);
             this.moveCameraToNode(intersectedNode);
+        }
+    }
+
+    // ノードクリックイベント
+    onNodeClick(event) {
+        if (!this.isNodeClickEnabled) return;
+        this.updateMousePosition(event);
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(
+            Array.from(this.nodes.values()).map(node => node.plane)
+        );
+
+        if (intersects.length > 0) {
+            const nodeData = intersects[0].object.userData.nodeData;
+            if (nodeData && nodeData.description) {
+                // descriptionとnameを組み合わせて表示
+                const message = `${nodeData.name}\n\n${nodeData.description}`;
+                alert(message);
+            }
         }
     }
 
