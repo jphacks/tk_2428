@@ -41,35 +41,39 @@ export class Node {
       this.createChart();
     }
   }
-
   createText() {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     canvas.width = 256;
     canvas.height = 128;
 
+    // スライダーから初期値を取得
+    const fontSize = document.getElementById('text-size').value;
+    
     // 背景を透明に
     context.fillStyle = 'rgba(255, 255, 255, 0)';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // テキストを描画
+    // テキストを描画（スライダーの値を使用）
     context.fillStyle = '#000000';
-    context.font = 'bold 24px Arial';
+    context.font = `${fontSize}px Arial`;
     context.textAlign = 'center';
     context.fillText(this.data.name, canvas.width / 2, canvas.height / 2);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.minFilter = THREE.LinearFilter;
     const spriteMaterial = new THREE.SpriteMaterial({
-      map: texture,
-      transparent: true
+        map: texture,
+        transparent: true
     });
     this.textSprite = new THREE.Sprite(spriteMaterial);
-    this.textSprite.scale.set(5, 2.5, 1);
+    
+    // スケールを fontSize に基づいて調整
+    const scale = fontSize / 24;  // 24pxを基準とした比率
+    this.textSprite.scale.set(5 * scale, 2.5 * scale, 1);
 
     this.scene.add(this.textSprite);
-  }
-
+}
   createChart() {
     // Canvas要素を作成し、Chart.jsで円グラフを描画
     const canvas = document.createElement('canvas');
