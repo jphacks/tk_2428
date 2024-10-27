@@ -1,6 +1,7 @@
 class UIControls {
     constructor() {
         this.initializeSliders();
+        this.applyInitialValues();
     }
 
     initializeSliders() {
@@ -18,15 +19,36 @@ class UIControls {
             });
         });
     }
+    applyInitialValues() {
+        const textSizeSlider = document.getElementById('text-size');
+        const nodeSizeSlider = document.getElementById('node-size');
+        const edgeSizeSlider = document.getElementById('edge-size');
+        const edgeLabelSizeSlider = document.getElementById('edge-label-size');
+
+        if (textSizeSlider) {
+            const event = new Event('input');
+            textSizeSlider.dispatchEvent(event);
+            this.applyValueChange(textSizeSlider);
+        }
+
+        // 他のスライダーも同様に初期化
+        [nodeSizeSlider, edgeSizeSlider, edgeLabelSizeSlider].forEach(slider => {
+            if (slider) {
+                const event = new Event('input');
+                slider.dispatchEvent(event);
+                this.applyValueChange(slider);
+            }
+        });
+    }
 
     updateValueDisplay(slider) {
-        // 値表示要素を取得
         const valueDisplay = slider.closest('.control-item')
-                                 .querySelector('.control-value');
+                                 .querySelector('label span');
         if (valueDisplay) {
             valueDisplay.textContent = `${slider.value}px`;
         }
     }
+
 
     applyValueChange(slider) {
         const value = slider.value;
