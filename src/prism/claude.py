@@ -61,7 +61,7 @@ def analyze_text(text : str):
     # call claude API
     response = client.messages.create(
         model = current_app.config['CLAUDE_MODEL'],
-        max_tokens = 2000,
+        max_tokens = 6000,
         messages=[
             {
                 "role" : "user",
