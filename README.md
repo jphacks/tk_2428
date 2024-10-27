@@ -137,5 +137,7 @@ Tips
 #### ハッカソンで開発した独自機能・技術
 * なし
 #### 特に力を入れた部分
+- 文章内から"記事"のみを抽出するのに試行錯誤しました
 * https://github.com/jphacks/tk_2428/pull/5/commits/3cf34934b05cecbcd2b21f3dee02946643c530b3
+- 3Dの動きを実装するのに苦労しました
 * https://github.com/jphacks/tk_2428/pull/7/commits/c93df6ff7d99a4e63087358a01d8cd997f267d4d
